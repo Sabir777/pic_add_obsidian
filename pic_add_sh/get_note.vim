@@ -1,14 +1,16 @@
-" Настройки для vim: выбор файлов
+" Настройки для vim выбора файлов
 
 " Удаляю маппинг для клавиши <leader>t
 unmap <leader>t
 
-" Функция для выбора заметки
-nnoremap <leader>t :echo "Hello"
+" Сохранить имя заметки в файле
+function! ExportCurrentLine()
+    let line = getline(".")  " Получаем текущую строку
+    let export_line = 'export NOTE="' . line . '"'  " Формируем строку
+    call writefile([export_line], "export_file.vim", "w")  " Переписываю файл
+    quit! " Закрываю vim
+endfunction
 
-" При открытии файла перемещаю курсор в конец документа и центрирую его
-augroup my_autocmds
-    autocmd!
-    autocmd VimEnter * normal! Gzz
-augroup END
+nnoremap <leader>t :call ExportCurrentLine()<CR>
+nnoremap бе :call ExportCurrentLine()<CR>
 

@@ -1,5 +1,11 @@
 *.md
 !README.md
-**/.obsidian/
-**/content/
+*.vim
+!get_note.vim
+!get_source.vim
+!get_content.vim
+
 *шаблоны/
+**/.obsidian/
+**/source_pic/
+**/content/
