@@ -4,6 +4,7 @@
 !get_note.vim
 !get_source.vim
 !get_content.vim
+!add_pic.vim
 
 *шаблоны/
 **/.obsidian/
