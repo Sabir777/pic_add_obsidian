@@ -68,7 +68,7 @@ vim -u NONE -c "source ~/.vimrc | source get_content.vim" all_dir.vim
 source "export_file.vim"
 
 # Удаляю файл all_dir.vim, export_file.vim
-# rm all_dir.vim export_file.vim
+rm all_dir.vim export_file.vim
 
 
 #------------------------------------------------------------------------------------
@@ -89,6 +89,8 @@ echo "--------------------------------------------------------------------------
 echo "Редактируемая заметка (здесь появятся ссылки на перемещенные картинки):" >> all_pic.vim
 echo "$NOTE" >> all_pic.vim
 echo -e "--------------------------------------------------------------------------------------------\n" >> all_pic.vim
+echo -e "После того как вы закончили работу с этим окном завершите работу vim с помощью ZZ \
+\n(это нужно для очистки от ненужных файлов и пустых папок)\n" >> all_pic.vim
 
 # Передаю в этот файл имена всех картинок содержащихся в исходной папке
 find "$SOURCE_PIC" -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" \) -exec realpath {} \; >> all_pic.vim
@@ -96,4 +98,12 @@ find "$SOURCE_PIC" -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png
 # Запускаю vim с особыми настройками
 # Перемещаю файл картинки в папку хранилища Obsidian ("content")
 vim -u NONE -c "source ~/.vimrc | source add_pic.vim" all_pic.vim
+
+# Удаляю файл all_pic.vim
+rm all_pic.vim
+
+# Удалить папку source если она пустая
+if [ -z "$(ls -A "$SOURCE_PIC")" ]; then
+    rmdir "$SOURCE_PIC"
+fi
 
