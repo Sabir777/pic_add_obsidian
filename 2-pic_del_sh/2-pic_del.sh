@@ -11,13 +11,7 @@
 # Аннотация
 #------------------------------------------------------------------------------------
 #
-# Скрипт нужен для удаления картинок из хранилища Obsidian
-#   - Я указываю заметку - В vim откроется указанная заметка
-#   - Я нахожу ссылку на свою картинку - жму `<leader>t` - Ссылка на заметку будет удалена
-#   - Скрипт проверяет есть ли еще ссылки на данную картинку в других заметках или в этой же заметке
-#   - Выведет результаты проверки
-#   - Если ссылок больше нет, то удалит картинку из хранилища и поместит ее в папку trash
-#   - в директории скрипта
+# Скрипт нужен для удаления картинок (вместе с ссылками на картинки) из хранилища Obsidian
 #
 #------------------------------------------------------------------------------------
 # Синтаксис: Передаю в команду имя-хранилища, как обязательный аргумент команды
@@ -79,55 +73,7 @@ nnoremap бе :call ExportCurrentLine()<CR>
 
 
 #------------------------------------------------------------------------------------
-# Создаю файл конфигурации vim: get_source.vim
-#------------------------------------------------------------------------------------
-
-{
-echo "\" Настройки для vim (выбор папки-источника)
-
-\" Удаляю маппинг для клавиши <leader>t
-unmap <leader>t
-
-\" Сохранить имя папки-источника в файле
-function! ExportCurrentLine()
-    let line = getline(\".\")  \" Получаем текущую строку
-    let export_line = 'export SOURCE_PIC=\"' . line . '\"'  \" Формируем строку
-    call writefile([export_line], \"export_file.vim\", \"w\")  \" Добавляю переменную в файл
-    quit! \" Закрываю vim
-endfunction
-
-nnoremap <leader>t :call ExportCurrentLine()<CR>
-nnoremap бе :call ExportCurrentLine()<CR>
-"
-} 1> get_source.vim
-
-
-#------------------------------------------------------------------------------------
-# Создаю файл конфигурации vim: get_content.vim
-#------------------------------------------------------------------------------------
-
-{
-echo "\" Настройки для vim (выбор папки-приемника)
-
-\" Удаляю маппинг для клавиши <leader>t
-unmap <leader>t
-
-\" Сохранить имя папки-приемника в файле
-function! ExportCurrentLine()
-    let line = getline(\".\")  \" Получаем текущую строку
-    let export_line = 'export CONTENT=\"' . line . '\"'  \" Формируем строку
-    call writefile([export_line], \"export_file.vim\", \"w\")  \" Добавляю переменную в файл
-    quit! \" Закрываю vim
-endfunction
-
-nnoremap <leader>t :call ExportCurrentLine()<CR>
-nnoremap бе :call ExportCurrentLine()<CR>
-"
-} 1> get_content.vim
-
-
-#------------------------------------------------------------------------------------
-# Создаю файл конфигурации vim: add_pic.vim
+# Создаю файл конфигурации vim: del_pic.vim
 #------------------------------------------------------------------------------------
 
 {
@@ -158,10 +104,10 @@ function! ExportCurrentLine()
     let move_cmd = \"mv \" . shellescape(filename) . \" \" . shellescape(new_filepath)
     
     \" Добавляю ссылку в заметку Obsidian
-    let add_link = \"echo -e '\n![[\" . new_filename . \"]]' >> \" . shellescape(target_note)
+    let del_link = \"echo -e '\n![[\" . new_filename . \"]]' >> \" . shellescape(target_note)
 
     call system(move_cmd)  \" Переместить файл с новым именем
-    call system(add_link)  \" Добавить ссылку в заметку
+    call system(del_link)  \" Добавить ссылку в заметку
 
     \" Удаляем текущую строку с именем файла
     execute \"normal! dd\"
@@ -194,8 +140,8 @@ function! ExportSelectedLines()
         call system(move_cmd)
 
         \" Добавляем ссылку в заметку
-        let add_link = \"printf '\n![[\" . new_filename . \"]]' >> \" . shellescape(target_note)
-        call system(add_link)
+        let del_link = \"printf '\n![[\" . new_filename . \"]]' >> \" . shellescape(target_note)
+        call system(del_link)
     endfor
 
     \" Удаляю имена файлов картинок которые я переместил в хранилище
@@ -205,7 +151,7 @@ endfunction
 vnoremap <leader>t :<C-u>call ExportSelectedLines()<CR><CR>
 vnoremap бе :<C-u>call ExportSelectedLines()<CR><CR>
 "
-} 1> add_pic.vim
+} 1> del_pic.vim
 
 
 #------------------------------------------------------------------------------------
@@ -248,7 +194,7 @@ printf "1) Найдите папку-источник в которой нахо
 чтобы записать директорию\n\n" > all_dir.vim
 
 # Передаю в этот файл названия всех папок содержащихся в директории запуска скрипта за исключением скрытых папок
-find_args=(-maxdepth 1 -not -name ".." -not -name "$1" -not -name "pic_add_sh" -not -path '*/.*')
+find_args=(-maxdepth 1 -not -name ".." -not -name "$1" -not -name "pic_del_sh" -not -path '*/.*')
 find .. "${find_args[@]}" -type d >> all_dir.vim
 
 # Запускаю vim с особыми настройками
@@ -319,7 +265,7 @@ find "$SOURCE_PIC" -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png
 
 # Запускаю vim с особыми настройками
 # Перемещаю файл картинки в папку хранилища Obsidian ("content")
-vim -u NONE -c "source ~/.vimrc | source add_pic.vim" all_pic.vim
+vim -u NONE -c "source ~/.vimrc | source del_pic.vim" all_pic.vim
 
 
 # Удалить папку source если она пустая
@@ -327,7 +273,7 @@ if [ -z "$(ls -A "$SOURCE_PIC")" ]; then
     rmdir "$SOURCE_PIC"
 fi
 
-# Удаляю папку pic_add_sh
+# Удаляю папку pic_del_sh
 cd ..
-rm -fr pic_add_sh
+rm -fr pic_del_sh
 
