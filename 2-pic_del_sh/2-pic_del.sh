@@ -73,85 +73,90 @@ nnoremap бе :call ExportCurrentLine()<CR>
 
 
 #------------------------------------------------------------------------------------
+# Создаю файл конфигурации vim: get_pic.vim
+#------------------------------------------------------------------------------------
+
+
+#------------------------------------------------------------------------------------
 # Создаю файл конфигурации vim: del_pic.vim
 #------------------------------------------------------------------------------------
 
-{
-echo "\" Настройки для vim (перемещение картинок в хранилище)
+# {
+# echo "\" Настройки для vim (перемещение картинок в хранилище)
 
-\" Удаляю маппинг для клавиши <leader>t
-unmap <leader>t
+# \" Удаляю маппинг для клавиши <leader>t
+# unmap <leader>t
 
-\" Копирование (Перемещение) файлов в папку content
-function! ExportCurrentLine()
-    let filename = getline(\".\")  \" Получаем имя файла картинки из текущей строки
-    let target_dir = getline(7)  \" Получаю имя папки куда будет перемещена картинка
-    let target_note = getline(12) \" Имя заметки, в которую я буду добавлять ссылку
+# \" Копирование (Перемещение) файлов в папку content
+# function! ExportCurrentLine()
+    # let filename = getline(\".\")  \" Получаем имя файла картинки из текущей строки
+    # let target_dir = getline(7)  \" Получаю имя папки куда будет перемещена картинка
+    # let target_note = getline(12) \" Имя заметки, в которую я буду добавлять ссылку
 
-    \" Получаем только имя файла без пути
-    let short_filename = fnamemodify(filename, \":t\")
+    # \" Получаем только имя файла без пути
+    # let short_filename = fnamemodify(filename, \":t\")
 
-    \" Получаем текущую дату и время в нужном формате
-    let timestamp = strftime(\"%Y%m%d%H%M\")
+    # \" Получаем текущую дату и время в нужном формате
+    # let timestamp = strftime(\"%Y%m%d%H%M\")
 
-    \" Формируем новое имя файла
-    let new_filename = timestamp . \"-\" . short_filename
+    # \" Формируем новое имя файла
+    # let new_filename = timestamp . \"-\" . short_filename
 
-    \" Полный путь для нового файла
-    let new_filepath = target_dir . \"/\" . new_filename
+    # \" Полный путь для нового файла
+    # let new_filepath = target_dir . \"/\" . new_filename
 
-    \" Создаю команду по перемещению файла с новым именем
-    let move_cmd = \"mv \" . shellescape(filename) . \" \" . shellescape(new_filepath)
+    # \" Создаю команду по перемещению файла с новым именем
+    # let move_cmd = \"mv \" . shellescape(filename) . \" \" . shellescape(new_filepath)
     
-    \" Добавляю ссылку в заметку Obsidian
-    let del_link = \"echo -e '\n![[\" . new_filename . \"]]' >> \" . shellescape(target_note)
+    # \" Добавляю ссылку в заметку Obsidian
+    # let del_link = \"echo -e '\n![[\" . new_filename . \"]]' >> \" . shellescape(target_note)
 
-    call system(move_cmd)  \" Переместить файл с новым именем
-    call system(del_link)  \" Добавить ссылку в заметку
+    # call system(move_cmd)  \" Переместить файл с новым именем
+    # call system(del_link)  \" Добавить ссылку в заметку
 
-    \" Удаляем текущую строку с именем файла
-    execute \"normal! dd\"
-endfunction
+    # \" Удаляем текущую строку с именем файла
+    # execute \"normal! dd\"
+# endfunction
 
-nnoremap <leader>t :call ExportCurrentLine()<CR>
-nnoremap бе :call ExportCurrentLine()<CR>
+# nnoremap <leader>t :call ExportCurrentLine()<CR>
+# nnoremap бе :call ExportCurrentLine()<CR>
 
 
 
-\" Копирование (Перемещение) файлов в папку content: диапазон (визуальный режим)
-function! ExportSelectedLines()
-    let start = getpos(\"'<\")[1]  \" Начальная строка выделения
-    let end = getpos(\"'>\")[1]    \" Конечная строка выделения
-    let target_dir = getline(7)  \" Папка назначения
-    let target_note = getline(12) \" Файл заметки для ссылок
+# \" Копирование (Перемещение) файлов в папку content: диапазон (визуальный режим)
+# function! ExportSelectedLines()
+    # let start = getpos(\"'<\")[1]  \" Начальная строка выделения
+    # let end = getpos(\"'>\")[1]    \" Конечная строка выделения
+    # let target_dir = getline(7)  \" Папка назначения
+    # let target_note = getline(12) \" Файл заметки для ссылок
 
-    \" Получаем все выделенные строки (файлы)
-    let files = getline(start, end)
+    # \" Получаем все выделенные строки (файлы)
+    # let files = getline(start, end)
 
-    \" Перебираем каждый файл
-    for filename in files
-        let short_filename = fnamemodify(filename, \":t\") \" Только имя файла
-        let timestamp = strftime(\"%Y%m%d%H%M\") \" Дата-время
-        let new_filename = timestamp . \"-\" . short_filename \" Новое имя\"
-        let new_filepath = target_dir . \"/\" . new_filename
+    # \" Перебираем каждый файл
+    # for filename in files
+        # let short_filename = fnamemodify(filename, \":t\") \" Только имя файла
+        # let timestamp = strftime(\"%Y%m%d%H%M\") \" Дата-время
+        # let new_filename = timestamp . \"-\" . short_filename \" Новое имя\"
+        # let new_filepath = target_dir . \"/\" . new_filename
 
-        \" Перемещаем файл
-        let move_cmd = \"mv \" . shellescape(filename) . \" \" . shellescape(new_filepath)
-        call system(move_cmd)
+        # \" Перемещаем файл
+        # let move_cmd = \"mv \" . shellescape(filename) . \" \" . shellescape(new_filepath)
+        # call system(move_cmd)
 
-        \" Добавляем ссылку в заметку
-        let del_link = \"printf '\n![[\" . new_filename . \"]]' >> \" . shellescape(target_note)
-        call system(del_link)
-    endfor
+        # \" Добавляем ссылку в заметку
+        # let del_link = \"printf '\n![[\" . new_filename . \"]]' >> \" . shellescape(target_note)
+        # call system(del_link)
+    # endfor
 
-    \" Удаляю имена файлов картинок которые я переместил в хранилище
-    normal! gvx
-endfunction
+    # \" Удаляю имена файлов картинок которые я переместил в хранилище
+    # normal! gvx
+# endfunction
 
-vnoremap <leader>t :<C-u>call ExportSelectedLines()<CR><CR>
-vnoremap бе :<C-u>call ExportSelectedLines()<CR><CR>
-"
-} 1> del_pic.vim
+# vnoremap <leader>t :<C-u>call ExportSelectedLines()<CR><CR>
+# vnoremap бе :<C-u>call ExportSelectedLines()<CR><CR>
+# "
+# } 1> del_pic.vim
 
 
 #------------------------------------------------------------------------------------
@@ -184,58 +189,79 @@ if [ -z "$NOTE" ]; then
 fi
 
 #------------------------------------------------------------------------------------
-# 2) Указываю путь до папки-источника (откуда копирую картинки)
+# 2) Указываю имя удаляемой картинки
 #------------------------------------------------------------------------------------
 
-# Создаю файл диалога "all_dir" в котором я буду искать папку-источник картинок
-printf "1) Найдите папку-источник в которой находятся картинки (отсюда я беру фото), \
-используя поиск по шаблону\n2) Убедитесь что папка с таким именем одна, используя клавишу "n" \
-\n3) Когда курсор будет находиться на интересующей папке нажмите <leader>t \
-чтобы записать директорию\n\n" > all_dir.vim
-
-# Передаю в этот файл названия всех папок содержащихся в директории запуска скрипта за исключением скрытых папок
-find_args=(-maxdepth 1 -not -name ".." -not -name "$1" -not -name "pic_del_sh" -not -path '*/.*')
-find .. "${find_args[@]}" -type d >> all_dir.vim
+# Создаю файл диалога "find_pic" в котором я буду искать свою заметку с помощью vim
+printf "1) Найдите свою картинку используя поиск по шаблону\n \
+именем одна, используя клавишу "n"\n3) Когда курсор будет находиться на \
+ссылке к интересующей картинке нажмите <leader>t чтобы удалить картинку\n\n" > find_pic.vim
 
 # Запускаю vim с особыми настройками
-# В vim я найду папку-источник через / (поиск)
-# Сохраню имя папки в переменную SOURCE_PIC в файл export_file.vim
-vim -u NONE -c "source ~/.vimrc | source get_source.vim" all_dir.vim
+# В заметке я найду имя картинки через / (поиск)
+# Сохраню имя картинки в переменную PIC в файл export_file.vim
+vim -u NONE -c "source ~/.vimrc | source get_pic.vim" find_pic.vim
 
+
+vim -c "source get_pic.vim" -c "/pattern" find_pic.vim
 
 # Считываю переменную в текущий bash-скрипт
-source "export_file.vim"
+# source "export_file.vim"
 
-if [ -z "$SOURCE_PIC" ]; then
-  echo "Вы не выбрали папку-источник с картинками"
-  exit
-fi
+# if [ -z "$CONTENT" ]; then
+  # echo "Вы не выбрали папку для хранения картинки"
+  # exit
+# fi
+
+# # Создаю файл диалога "all_dir" в котором я буду искать папку-источник картинок
+# printf "1) Найдите папку-источник в которой находятся картинки (отсюда я беру фото), \
+# используя поиск по шаблону\n2) Убедитесь что папка с таким именем одна, используя клавишу "n" \
+# \n3) Когда курсор будет находиться на интересующей папке нажмите <leader>t \
+# чтобы записать директорию\n\n" > all_dir.vim
+
+# # Передаю в этот файл названия всех папок содержащихся в директории запуска скрипта за исключением скрытых папок
+# find_args=(-maxdepth 1 -not -name ".." -not -name "$1" -not -name "pic_del_sh" -not -path '*/.*')
+# find .. "${find_args[@]}" -type d >> all_dir.vim
+
+# # Запускаю vim с особыми настройками
+# # В vim я найду папку-источник через / (поиск)
+# # Сохраню имя папки в переменную SOURCE_PIC в файл export_file.vim
+# vim -u NONE -c "source ~/.vimrc | source get_source.vim" all_dir.vim
+
+
+# # Считываю переменную в текущий bash-скрипт
+# source "export_file.vim"
+
+# if [ -z "$SOURCE_PIC" ]; then
+  # echo "Вы не выбрали папку-источник с картинками"
+  # exit
+# fi
 
 #------------------------------------------------------------------------------------
 # 3) Указываю путь до целевой папки хранения картинок в хранилище Obsidian
 #------------------------------------------------------------------------------------
 
 # Создаю файл диалога "all_dir.vim" в котором я буду искать папку-приемник картинок
-printf "1) Найдите папку-приемник для хранения контента (картинки) в хранилище Obsidian \
-используя поиск по шаблону\n2) Убедитесь что папка с таким именем одна, используя клавишу "n" \
-\n3) Когда курсор будет находиться на интересующей папке нажмите <leader>t \
-чтобы записать директорию\n\n" > all_dir.vim
+# printf "1) Найдите папку-приемник для хранения контента (картинки) в хранилище Obsidian \
+# используя поиск по шаблону\n2) Убедитесь что папка с таким именем одна, используя клавишу "n" \
+# \n3) Когда курсор будет находиться на интересующей папке нажмите <leader>t \
+# чтобы записать директорию\n\n" > all_dir.vim
 
 # Передаю в этот файл названия всех папок содержащихся в хранилище (кроме скрытых; рекурсивный поиск)
-find "../$1/." \( -name '.*' -and -type d -and -not -name '.' \) -prune -o -type d -print >> all_dir.vim
+# find "../$1/." \( -name '.*' -and -type d -and -not -name '.' \) -prune -o -type d -print >> all_dir.vim
 
 # Запускаю vim с особыми настройками
 # В vim я найду папку "content (примерное название)" через / (поиск)
 # Сохраню имя папки в переменную CONTENT в файл export_file.vim
-vim -u NONE -c "source ~/.vimrc | source get_content.vim" all_dir.vim
+# vim -u NONE -c "source ~/.vimrc | source get_content.vim" all_dir.vim
 
 # Считываю переменную в текущий bash-скрипт
-source "export_file.vim"
+# source "export_file.vim"
 
-if [ -z "$CONTENT" ]; then
-  echo "Вы не выбрали папку для хранения картинки"
-  exit
-fi
+# if [ -z "$CONTENT" ]; then
+  # echo "Вы не выбрали папку для хранения картинки"
+  # exit
+# fi
 
 
 #------------------------------------------------------------------------------------
