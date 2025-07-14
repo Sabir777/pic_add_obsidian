@@ -1,10 +1,6 @@
 *.md
 !README.md
 *.vim
-!get_note.vim
-!get_source.vim
-!get_content.vim
-!add_pic.vim
 *.jpg
 *.JPG
 *.png
@@ -17,3 +13,5 @@
 **/content/
 Obsidian*
 grep*
+pic_del_sh/
+pic_add_sh/
